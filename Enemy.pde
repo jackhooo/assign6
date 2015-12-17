@@ -2,6 +2,8 @@ class Enemy {
   int x = 0;
   int y = 0;
   int type;
+  int bullethittime = 0;
+  int bullethitmaxtime = 1;
   int speed = 5;
 
   PImage enemyImg;
@@ -11,26 +13,40 @@ class Enemy {
     this.type = type;
     enemyImg = loadImage("img/enemy.png");
   }
-  void move() {
-    this.x+= 5;
+  void move(){
+    this.x+=5;
   }
-
+  int damage()
+  {
+    return -20;
+  }
   void draw()
   {
     image(enemyImg, x, y);
   }
-
-  boolean isCollideWithFighter()
-  {
-    if(isHit( fighter.x, fighter.y, fighter.fighterImg.width, fighter.fighterImg.height, x, y, enemyImg.width, enemyImg.height))
-    {return true;}
+  boolean bullethit()
+  { bullethittime++;
+    if(bullethittime == bullethitmaxtime)
+    {
+      bullethittime=0;
+      return true;
+    }
     return false;
   }
-
+  boolean isCollideWithFighter()
+  {
+    if (isHit( fighter.x, fighter.y, fighter.fighterImg.width, fighter.fighterImg.height, x, y, enemyImg.width, enemyImg.height))
+    {
+      return true;
+    }
+    return false;
+  }
   boolean isOutOfBorder()
   {
-    if(x>width)
-    {return true;}
+    if (this.x>width)
+    {
+      return true;
+    }
     return false;
   }
 }
@@ -98,6 +114,6 @@ void addDiamondEnemy()
 void addEnemyStrong()
 {
   for (int i = 0; i < 5; ++i) {
-    enemys[i] = new Enemy(0, 40+ i * 85, FlightType.ENEMYSTRONG);
+    enemys[i] = new Boss(0, 40+ i * 85, FlightType.ENEMYSTRONG);
   }
 }
