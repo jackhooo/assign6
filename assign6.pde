@@ -70,27 +70,31 @@ void draw()
     if (millis() - time >= wait) {
       addEnemy(currentType++);
       currentType = currentType%4;
+      if(currentType%4==0)
+      {wait=6000;}
+      else{wait=4000;}
     }		
 
     for (int i = 0; i < enemyCount; ++i) {
-      if (enemys[i]!= null) {
+      if (enemys[i]!=null) {
         enemys[i].move();
         enemys[i].draw();
         if (enemys[i].isCollideWithFighter()) {
-          fighter.hpValueChange(-20);
+          fighter.hpValueChange(enemys[i].damage());
           flameMgr.addFlame(enemys[i].x, enemys[i].y);
           enemys[i]=null;
         } else if (enemys[i].isOutOfBorder()) {
           enemys[i]=null;
         }
       }
-      for (int c = 0; c< bulletCount; c++) {
+      for (int c = 0; c < bulletCount; c++) {
         if (bullets[c]!= null)
         {
           if (enemys[i]!= null&&bullets[c].isCollideWithEnemy(enemys[i].x, enemys[i].y, enemys[i].enemyImg.width, enemys[i].enemyImg.height)) {
-            flameMgr.addFlame(enemys[i].x, enemys[i].y);
-            enemys[i]=null;
             bullets[c]=null;
+            if(enemys[i].bullethit()){
+            flameMgr.addFlame(enemys[i].x, enemys[i].y);
+            enemys[i]=null;}
           } else if (bullets[c].isOutOfBorder()) 
           { bullets[c]=null;}
         }
